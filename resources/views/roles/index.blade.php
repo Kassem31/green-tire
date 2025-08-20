@@ -49,13 +49,6 @@
                                         <td>{{ $role->display_name }}</td>
                                         <td>{{ $role->description }}</td>
                                         <td>
-                                            {{-- DEBUG: Check permissions --}}
-                                            @if(auth()->user()->can('delete_role'))
-                                                <span style="color: green;">✓ Has delete_role permission</span><br>
-                                            @else
-                                                <span style="color: red;">✗ Missing delete_role permission</span><br>
-                                            @endif
-                                            
                                             {{-- <x-show-button route="roles.show" :param="$role->id" name="role" /> --}}
                                             <x-edit-button route="roles.edit" :param="$role->id" name="role" />
                                             <x-delete-button route="roles.destroy" :param="$role->id" name="role" />

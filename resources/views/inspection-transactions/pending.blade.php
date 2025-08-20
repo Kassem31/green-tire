@@ -44,9 +44,12 @@
                                         <td>{{ $transaction->created_at->format('Y-m-d H:i') }}</td>
                                         <td>
                                             <div class="btn-group" role="group">
+                                                @permission('show_pending-transactions')
                                                 <a href="{{ route('inspection_transactions.show', $transaction) }}" class="btn btn-info btn-sm">{{ __('buttons.view') }}</a>
+                                                @endpermission
+                                                @permission('edit_pending-transactions')
                                                 <a href="{{ route('inspection_transactions.edit', $transaction) }}" class="btn btn-warning btn-sm">{{ __('buttons.edit') }}</a>
-
+                                                @endpermission
                                             </div>
                                         </td>
                                     </tr>

@@ -19,7 +19,9 @@
             </div>
 
             <div class="d-flex justify-content-between mb-3">
+                @permission('list_repair-transactions')
                 <a href="{{ route('repair-transactions.index') }}" class="btn btn-secondary">{{ __('navigation.repair_transactions') }}</a>
+                @endpermission
             </div>
             
             <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
@@ -106,10 +108,14 @@
                                         <td data-th="Created At">{{ $transaction->created_at->format('Y-m-d') }}</td>
                                         <td class="text-center" data-th="Actions">
                                             <div class="d-flex flex-wrap justify-content-center button-group gap-1">
+                                                @permission('show_pending-transactions')
                                                 <a href="{{ route('repair-transactions.show', $transaction) }}"
                                                     class="btn btn-info btn-sm">{{ __('View') }}</a>
+                                                @endpermission
+                                                @permission('edit_pending-transactions')
                                                 <a href="{{ route('repair-transactions.edit', $transaction) }}"
                                                     class="btn btn-warning btn-sm">{{ __('Edit') }}</a>
+                                                @endpermission
                                             </div>
                                         </td>
                                     </tr>

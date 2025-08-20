@@ -20,7 +20,7 @@ class MenuSeeder extends Seeder
             'name'       => 'Users Management',
             'translation_key' => 'user_management',
             'order'      => $order++,
-            'permission' => 'list_user',
+            'permission' => 'list_users_management',
             'svg'        => 'svg/users.svg', // Users management icon
             // 'panel_type' => '1',
         ]);
@@ -89,11 +89,6 @@ class MenuSeeder extends Seeder
             'permission' => 'list_repair-steps',
             // 'panel_type' => '1',
         ]);
-
-
-
-
-
 
         $inspection_transactions = Menu::create([
             'name'       => 'Inspection Transactions',

@@ -27,6 +27,7 @@ return [
     'user' => 'مستخدم',
     'user_management' => 'إدارة المستخدمين',
     'roles' => 'الأدوار',
+    'role' => 'دور',
     'permissions' => 'الصلاحيات',
     'reports' => 'التقارير',
     'analytics' => 'التحليلات',

@@ -10,7 +10,9 @@
             <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
                 <div class="widget-content widget-content-area br-8">
                     <div class="d-flex justify-content-end mb-4">
+                        @permission('edit_repair-transactions')
                         <a href="{{ route('repair-transactions.edit', $repairTransaction) }}" class="btn btn-primary mr-2">{{ __('buttons.edit') }}</a>
+                        @endpermission
                         <a href="{{ route('repair-transactions.index') }}" class="btn btn-secondary">{{ __('buttons.back_to_repair_transactions') }}</a>
                     </div>
 

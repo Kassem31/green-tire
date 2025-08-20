@@ -13,6 +13,8 @@ class PermissionsTableSeeder extends Seeder
         DB::table('permissions')->delete();
 
         $permissions = [
+            'list_users_management',
+
             'list_user',
             'show_user',
             'create_user',
@@ -20,7 +22,6 @@ class PermissionsTableSeeder extends Seeder
             'delete_user',
 
             'list_role',
-            'show_role',
             'edit_role',
             'create_role',
             'delete_role',
@@ -48,6 +49,12 @@ class PermissionsTableSeeder extends Seeder
             'create_pending-transactions',
             'edit_pending-transactions',
             'delete_pending-transactions',            
+
+            'list_repair-transactions',
+            'show_repair-transactions',
+            'create_repair-transactions',
+            'edit_repair-transactions',
+            'delete_repair-transactions'
         ];
 
         foreach ($permissions as $permission) {

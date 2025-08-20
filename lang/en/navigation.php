@@ -27,6 +27,7 @@ return [
     'user' => 'User',
     'user_management' => 'User Management',
     'roles' => 'Roles',
+    'role' => 'Role',
     'permissions' => 'Permissions',
     'reports' => 'Reports',
     'analytics' => 'Analytics',

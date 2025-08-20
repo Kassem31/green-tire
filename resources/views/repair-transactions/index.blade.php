@@ -24,7 +24,9 @@
                 </div>
 
                 <div class="d-flex justify-content-between mb-3">
+                    @permission('list_repair-transactions')
                     <a href="{{ route('repair-transactions.pending') }}" class="btn btn-warning">{{ __('navigation.pending_repair_transactions') }}</a>
+                    @endpermission
                 </div>
 
                 <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
@@ -77,10 +79,15 @@
                                                 {{ $transaction->created_at->format('Y-m-d') }}</td>
                                             <td data-th="{{ __('forms.actions') }}">
                                                 <div class="d-flex flex-wrap justify-content-center button-group gap-1">
+                                                    @permission('show_repair-transactions')
                                                     <a href="{{ route('repair-transactions.show', $transaction) }}"
                                                         class="btn btn-info btn-sm">{{ __('buttons.view') }}</a>
+                                                    @endpermission
+                                                    @permission('edit_repair-transactions')
                                                     <a href="{{ route('repair-transactions.edit', $transaction) }}"
                                                         class="btn btn-warning btn-sm">{{ __('buttons.edit') }}</a>
+                                                    @endpermission
+                                                    @permission('delete_repair-transactions')
                                                     <form action="{{ route('repair-transactions.destroy', $transaction) }}"
                                                         method="POST" class="d-inline"
                                                         onsubmit="return confirm('{{ __('messages.confirm_delete_repair_transaction') }}')">
@@ -89,6 +96,7 @@
                                                         <button type="submit" class="btn btn-danger btn-sm"
                                                             style="margin-top: 0.85rem">{{ __('buttons.delete') }}</button>
                                                     </form>
+                                                    @endpermission
                                                 </div>
                                             </td>
                                         </tr>

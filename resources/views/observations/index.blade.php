@@ -17,8 +17,8 @@
 
 @section('content')
     <div class="layout-px-spacing">
-
         <div class="middle-content container-xxl p-0">
+
 
             <!-- BREADCRUMB -->
             <div class="page-meta">
@@ -71,12 +71,12 @@
                                         <td>{{ $observation->name_en }}</td>
                                         <td class="text-center">
                                             <!-- Show Button -->
-                                            <x-show-button route="observations.show" :param="$observation->id" name="observation" />
+                                            <x-show-button route="observations.show" :param="$observation->id" name="observations" />
                                             <!-- Edit Button -->
-                                            <x-edit-button route="observations.edit" :param="$observation->id" name="observation" />
+                                            <x-edit-button route="observations.edit" :param="$observation->id" name="observations" />
                                             <!-- Delete Button -->
                                             <x-delete-button route="observations.destroy" :param="$observation->id"
-                                                name="observation" />
+                                                name="observations" />
                                         </td>
                                     </tr>
                                 @endforeach
