@@ -6,9 +6,18 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Models\Permission;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('super_permission:list_role')->only(['index']);
+        $this->middleware('super_permission:create_role')->only(['create', 'store']);
+        $this->middleware('super_permission:edit_role')->only(['edit', 'update']);
+        $this->middleware('super_permission:delete_role')->only(['destroy']);
+    }
+
     public function index()
     {
         $roles = Role::all();
@@ -17,7 +26,7 @@ class RoleController extends Controller
 
     public function create()
     {
-        $permissions = Permission::all()->groupBy(function($permission) {
+        $permissions = Permission::all()->groupBy(function ($permission) {
             return explode('_', $permission->name)[1];
         });
 
@@ -34,7 +43,7 @@ class RoleController extends Controller
     public function edit($id)
     {
         $role = Role::findOrFail($id);
-        $permissions = Permission::all()->groupBy(function($permission) {
+        $permissions = Permission::all()->groupBy(function ($permission) {
             return explode('_', $permission->name)[1]; // Assuming permission names are in the format 'action_model'
         });
 

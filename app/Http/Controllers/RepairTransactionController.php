@@ -11,6 +11,16 @@ use Illuminate\Support\Facades\DB;
 
 class RepairTransactionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('super_permission:list_repair-transactions')->only(['index']);
+        $this->middleware('super_permission:show_repair-transactions')->only(['show']);
+        $this->middleware('super_permission:create_repair-transactions')->only(['create', 'store']);
+        $this->middleware('super_permission:edit_repair-transactions')->only(['edit', 'update']);
+        $this->middleware('super_permission:delete_repair-transactions')->only(['destroy']);
+        $this->middleware('super_permission:list_pending-transactions')->only(['pending']);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -37,14 +47,14 @@ class RepairTransactionController extends Controller
 
         // Filter by inspection barcode
         if ($request->filled('barcode')) {
-            $query->whereHas('inspectionTransaction', function($q) use ($request) {
+            $query->whereHas('inspectionTransaction', function ($q) use ($request) {
                 $q->where('barcode', 'LIKE', '%' . $request->barcode . '%');
             });
         }
 
         // Filter by tire type
         if ($request->filled('tire_type_id')) {
-            $query->whereHas('inspectionTransaction', function($q) use ($request) {
+            $query->whereHas('inspectionTransaction', function ($q) use ($request) {
                 $q->where('tire_type_id', $request->tire_type_id);
             });
         }
@@ -122,11 +132,11 @@ class RepairTransactionController extends Controller
             $barcode,
         ]);
 
-            if ($validated['decision'] === 'repair' && !empty($validated['repair_steps'])) {
+        if ($validated['decision'] === 'repair' && !empty($validated['repair_steps'])) {
 
-        DB::connection('SP_Connection')->statement('EXEC [dbo].SET_BLOCK_GT_BAPTIZE ?, 0', [
-            $barcode,
-        ]);
+            DB::connection('SP_Connection')->statement('EXEC [dbo].SET_BLOCK_GT_BAPTIZE ?, 0', [
+                $barcode,
+            ]);
 
             $repairTransaction->repairSteps()->attach($validated['repair_steps'], [
                 'created_by' => Auth::id(),

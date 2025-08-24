@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\RepairStep;
@@ -7,6 +8,15 @@ use Illuminate\Support\Facades\Auth;
 
 class RepairStepController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('super_permission:list_repair-steps')->only(['index']);
+        $this->middleware('super_permission:show_repair-steps')->only(['show']);
+        $this->middleware('super_permission:create_repair-steps')->only(['create', 'store']);
+        $this->middleware('super_permission:edit_repair-steps')->only(['edit', 'update']);
+        $this->middleware('super_permission:delete_repair-steps')->only(['destroy']);
+    }
+
     /**
      * Display a listing of the resource.
      */

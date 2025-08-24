@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\InspectionTransaction;
@@ -7,9 +8,19 @@ use App\Models\TireType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class InspectionTransactionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('super_permission:list_inspection-transactions')->only(['index']);
+        $this->middleware('super_permission:show_inspection-transactions')->only(['show']);
+        $this->middleware('super_permission:create_inspection-transactions')->only(['create', 'store']);
+        $this->middleware('super_permission:edit_inspection-transactions')->only(['edit', 'update']);
+        $this->middleware('super_permission:delete_inspection-transactions')->only(['destroy']);
+        $this->middleware('super_permission:list_pending-transactions')->only(['pending']);
+    }
 
     /**
      * Display a listing of the inspection transactions.
@@ -106,7 +117,7 @@ class InspectionTransactionController extends Controller
         // Validate that the barcode exists in the manufacturing system
         try {
             DB::beginTransaction();
-            $results = DB::connection('SP_Connection')->select("EXEC [dbo].[GT_Data] ?",[
+            $results = DB::connection('SP_Connection')->select("EXEC [dbo].[GT_Data] ?", [
                 $request['barcode']
             ]);
 
@@ -117,7 +128,7 @@ class InspectionTransactionController extends Controller
                     ->withErrors(['barcode' => __('messages.barcode_not_in_manufacturing')]);
             }
         } catch (\Exception $e) {
-            \Log::error('Barcode validation error: ' . $e->getMessage());
+            Log::error('Barcode validation error: ' . $e->getMessage());
             return redirect()->back()
                 ->withInput()
                 ->withErrors(['barcode' => __('messages.barcode_validation_error')]);
@@ -203,7 +214,7 @@ class InspectionTransactionController extends Controller
      */
     public function update(Request $request, InspectionTransaction $inspectionTransaction)
     {
-            // Check if the barcode already exists (excluding the current record)
+        // Check if the barcode already exists (excluding the current record)
         $existingTransaction = InspectionTransaction::where('barcode', $request->barcode)
             ->where('id', '!=', $inspectionTransaction->id)
             ->withTrashed() // Include soft deleted records in the check
@@ -217,7 +228,7 @@ class InspectionTransactionController extends Controller
 
         // Validate that the barcode exists in the manufacturing system
         try {
-            $results = DB::connection('SP_Connection')->select("EXEC [dbo].[GT_Data] ?",[
+            $results = DB::connection('SP_Connection')->select("EXEC [dbo].[GT_Data] ?", [
                 $request['barcode']
             ]);
 
@@ -228,7 +239,7 @@ class InspectionTransactionController extends Controller
                     ->withErrors(['barcode' => __('messages.barcode_not_in_manufacturing')]);
             }
         } catch (\Exception $e) {
-            \Log::error('Barcode validation error: ' . $e->getMessage());
+            Log::error('Barcode validation error: ' . $e->getMessage());
             return redirect()->back()
                 ->withInput()
                 ->withErrors(['barcode' => __('messages.barcode_validation_error')]);

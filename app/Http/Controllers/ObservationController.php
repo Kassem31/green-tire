@@ -9,6 +9,15 @@ use Illuminate\Support\Str;
 
 class ObservationController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('super_permission:list_observations')->only(['index']);
+        $this->middleware('super_permission:show_observations')->only(['show']);
+        $this->middleware('super_permission:create_observations')->only(['create', 'store']);
+        $this->middleware('super_permission:edit_observations')->only(['edit', 'update']);
+        $this->middleware('super_permission:delete_observations')->only(['destroy']);
+    }
+
     /**
      * Display a listing of the observations.
      *
@@ -16,9 +25,8 @@ class ObservationController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Observation::query();
 
-        
+        $query = Observation::query();
 
         // Apply Arabic name filter if provided
         if ($request->filled('name_ar')) {
@@ -66,7 +74,7 @@ class ObservationController extends Controller
         Observation::create($validated);
 
         return redirect()->route('observations.index')
-                         ->with('success', __('messages.observation_created_successfully'));
+            ->with('success', __('messages.observation_created_successfully'));
     }
 
     /**
@@ -112,7 +120,7 @@ class ObservationController extends Controller
         $observation->update($validated);
 
         return redirect()->route('observations.index')
-                         ->with('success', __('messages.observation_updated_successfully'));
+            ->with('success', __('messages.observation_updated_successfully'));
     }
 
     /**
@@ -126,7 +134,7 @@ class ObservationController extends Controller
         // Check if the observation is being used in any inspection transactions
         if ($observation->inspectionTransactions()->count() > 0) {
             return redirect()->route('observations.index')
-                            ->with('error', __('messages.observation_cannot_be_deleted'));
+                ->with('error', __('messages.observation_cannot_be_deleted'));
         }
 
         // If not in use, proceed with deletion
@@ -136,6 +144,6 @@ class ObservationController extends Controller
         $observation->delete();
 
         return redirect()->route('observations.index')
-                        ->with('success', __('messages.observation_deleted_successfully'));
+            ->with('success', __('messages.observation_deleted_successfully'));
     }
 }

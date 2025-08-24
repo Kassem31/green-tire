@@ -16,6 +16,15 @@ use App\Models\Role;
 
 class ProfileController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('super_permission:list_user')->only(['listUsers']);
+        $this->middleware('super_permission:show_user')->only(['showUser']);
+        $this->middleware('super_permission:create_user')->only(['createUser', 'storeUser']);
+        $this->middleware('super_permission:edit_user')->only(['editUser', 'updateUser']);
+        $this->middleware('super_permission:delete_user')->only(['destroyUser']);
+    }
+
     /**
      * Display the user's profile form.
      */
@@ -65,7 +74,7 @@ class ProfileController extends Controller
 
     public function listUsers()
     {
-        $users = User::with('roles')->where('id' , "!=" , auth()->user()->id)->where('is_super_admin',0)->get();
+        $users = User::with('roles')->where('id', "!=", auth()->user()->id)->where('is_super_admin', 0)->get();
         return view('users.index', compact('users'));
     }
 
@@ -86,8 +95,8 @@ class ProfileController extends Controller
 
         if ($validator->fails()) {
             return redirect()->route('users.index')
-                             ->withErrors($validator)
-                             ->withInput();
+                ->withErrors($validator)
+                ->withInput();
         }
 
         DB::beginTransaction();
@@ -99,9 +108,9 @@ class ProfileController extends Controller
         ]);
 
 
-        if($request->role_id){
-        $user->syncRoles([$request->role_id]);
-	}
+        if ($request->role_id) {
+            $user->syncRoles([$request->role_id]);
+        }
 
         DB::commit();
 
@@ -130,8 +139,8 @@ class ProfileController extends Controller
 
         if ($validator->fails()) {
             return redirect()->route('users.edit', $user)
-                             ->withErrors($validator)
-                             ->withInput();
+                ->withErrors($validator)
+                ->withInput();
         }
 
         DB::beginTransaction();
@@ -140,12 +149,12 @@ class ProfileController extends Controller
             'email' => $request->email,
             'is_active' => $request->is_active,
         ]);
-	
-	    $user->roles()->detach();
 
-        if($request->role_id){
-        $user->syncRoles([$request->role_id]);
-	}
+        $user->roles()->detach();
+
+        if ($request->role_id) {
+            $user->syncRoles([$request->role_id]);
+        }
 
         DB::commit();
 
@@ -172,16 +181,16 @@ class ProfileController extends Controller
 
         if ($validator->fails()) {
             return redirect()->route('profile.showResetPasswordForm')
-                             ->withErrors($validator)
-                             ->withInput();
+                ->withErrors($validator)
+                ->withInput();
         }
 
         $user = Auth::user();
 
         if (!Hash::check($request->current_password, $user->password)) {
             return redirect()->route('profile.showResetPasswordForm')
-                             ->withErrors(['current_password' => 'Current password is incorrect'])
-                             ->withInput();
+                ->withErrors(['current_password' => 'Current password is incorrect'])
+                ->withInput();
         }
 
         $user->password = Hash::make($request->new_password);
